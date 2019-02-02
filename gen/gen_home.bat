@@ -1,0 +1,1 @@
+lucid-from-html -s home.html > home.hs
