@@ -34,12 +34,22 @@ resolver: lts-12.26
 #  - wai
 packages:
 - .
+# - location:
+#     git: https://github.com/agrafix/Spock-digestive.git
+#     commit: 2c55db01b65e03bc00429a30fb119851f974bee7
+#   extra-dep: true
+
+
 # Dependency packages to be pulled from upstream that are not in the resolver
 # using the same syntax as the packages field.
 # (e.g., acme-missiles-0.3)
 # extra-deps: []
 extra-deps:
 - Spock-lucid-0.4.0.1
+- digestive-functors-0.8.4.0
+- Spock-digestive-0.3.0.0
+- digestive-functors-lucid-0.0.0.5
+# - Spock-digestive-0.3.0.0
 # - reroute-0.5.0.0
 # - stm-containers-1.1.0.2
 # - stm-hamt-1.2.0.2
