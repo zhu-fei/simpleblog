@@ -37,12 +37,16 @@ executable hi
                        ,Web.Views.Login
                        ,Web.Views.Home
                        ,Web.Model.CoreTypes
+                       ,Web.Forms.Login
 
 
 
   build-depends:       base >= 4.7 && < 5
                                ,parsec
                                ,Spock
+                               ,Spock-digestive
+                               ,digestive-functors
+                               ,digestive-functors-lucid
                                ,http-types
                                ,text
                                ,mtl
