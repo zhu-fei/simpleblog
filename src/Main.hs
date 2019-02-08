@@ -35,6 +35,7 @@ import Data.HVect
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.IORef
+import Text.Digestive.View (View)
 
 import Web.Spock.Lucid (lucid)
 
@@ -43,8 +44,9 @@ import Data.String.Conversions
  
 import qualified Data.ByteString.Char8 as C
 
-import Web.Spock
+import Web.Spock -- (lazyBytes ...)
 import Web.Spock.Config
+import Web.Spock.Digestive
 
 import           Database.Persist        hiding (get)
 import          Database.Persist.Sqlite hiding (get)
@@ -61,6 +63,7 @@ import Web.Views.Login
 import Web.Views.Home
 import Web.Model.CoreTypes
 
+import Web.Forms.Login
 
 
 data Note = Note {author :: Text,  contents :: Text}
@@ -75,35 +78,55 @@ blaze ::  (MonadIO m) => Html () -> ActionCtxT ctx m a
 blaze = lazyBytes .cs . renderText 
 
 
-loginAction :: ApiAction ()
+
+
+
+ 
+
+
+loginAction :: ApiAction  a -- (View (Html () ), Maybe LoginRequest)
 loginAction = do
   liftIO $ putStrLn "loginAction"
+  f <- runForm "loginForm" loginForm
+  case f of 
+    (view, Nothing) ->
+      blaze $ loginFormView view
+      -- blaze $ renderLoginForm view
+      -- blaze $ renderLoginForm view
+      -- blaze $ toHtmlRaw $ show view
+      -- blaze $ loginView
+    (view, Just loginReq) ->
+      blaze $ toHtmlRaw $ show loginReq
+
 
 -- app :: Server ()
 -- app = return ()
 -- app = get root (text "Hello")
 -- app = get root (html "<h1>Hello!")
 -- app :： SpockM conn sess st ()
-baseHook :: ApiAction  ()
-baseHook = return ()
+-- baseHook :: ApiAction  ()
+-- baseHook = return ()
 
 app = 
-  prehook baseHook $ do
+  -- prehook baseHook $ do
+    do
       middleware ( staticPolicy $ addBase "static")
-      get "/logi" $ do
-        lucid $ do
-          loginView 
+      -- get "/logi" $ do
+      --   lucid $ do
+      --     loginView 
 
       getpost "/login" 
          loginAction
 
 
 
-      get "/"  $ do
-        allPosts <- runSQL $ selectList [] [Desc PostDate]
-        liftIO $ print allPosts
-        lucid $ do
-          homeView allPosts
+      -- get "/"  $ do
+      --   allPosts <- runSQL $ selectList [] [Desc PostDate]
+      --   liftIO $ print allPosts
+      --   lucid $ do
+      --     homeView allPosts
+
+      
 
 
 
